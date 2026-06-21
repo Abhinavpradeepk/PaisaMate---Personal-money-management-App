@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:paisamate/db/expense.dart';
 import 'package:paisamate/db/income_db.dart';
 import 'package:paisamate/functions/Income_functions.dart';
+import 'package:paisamate/functions/expense_function.dart';
 import 'package:paisamate/model/income_model.dart';
 class IncomeScreen extends StatefulWidget {
   
@@ -83,7 +85,22 @@ List <IncomeModel> IncomeList= [];
                 leading: Icon(Icons.currency_rupee),
                 title:Text(income.source),
                 subtitle: Text(income.date),
-                trailing: Text('₹${income.amount}'),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('₹${income.amount}'),
+                    IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red),
+                      onPressed: () async {
+                        if (income.id != null) {
+                          await IncomeDB.deleteIncome(income.id!);
+                          await loadIncome();
+                          await refreshTotalIncome();
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
             );
           }))

@@ -45,7 +45,15 @@ class IncomeDB {
     final result = await db.rawQuery(
       'SELECT SUM(amount) as total FROM income'
     );
-     return (result.first['total'] as num?)?.toDouble() ?? 0.0;
-  
-}
+    return (result.first['total'] as num?)?.toDouble() ?? 0.0;
+  }
+
+  static Future<void> deleteIncome(int id) async {
+    final db = await database();
+    await db.delete(
+      'income',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 }

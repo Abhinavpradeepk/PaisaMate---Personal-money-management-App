@@ -22,7 +22,15 @@ class _ScreenSplashState extends State<ScreenSplash> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('PaisaMate',)
+        child: AnimatedContainer(duration: Duration(seconds: 3),
+        color: Colors.amber,
+        width: 200.0,
+        
+          child: Text('PaisaMate',
+
+          ),
+        ),
+        
       ),
     );
   }
