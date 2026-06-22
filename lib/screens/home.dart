@@ -16,22 +16,24 @@ class ScreenHome extends StatefulWidget {
 
 double totalIncome = 0;
 double totalExpense = 0;
+
 class _ScreenHomeState extends State<ScreenHome> {
-    Future <void> loadTotalIncome()async {
-  final total = await IncomeDB.getTotalIncome();
-  setState(() {
+  Future<void> loadTotalIncome() async {
+    final total = await IncomeDB.getTotalIncome();
+
+    setState(() {
       totalIncome = total;
     });
-}
+  }
 
+  Future<void> loadTotalExpense() async {
+    final total = await ExpenseDB.getTotalExpense();
 
-Future <void> loadTotalExpense()async{
-  final total = await ExpenseDB.getTotalExpense();
-  setState(() {
-    totalExpense=total;
-  });
+    setState(() {
+      totalExpense = total;
+    });
+  }
 
-}
   @override
   void initState() {
     super.initState();
@@ -41,156 +43,238 @@ Future <void> loadTotalExpense()async{
     refreshTotalExpense();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title:Text('PaisaMate'),backgroundColor: Color.fromARGB(80, 0, 4, 255)),
-      body: SafeArea(child: Padding(padding: EdgeInsets.all(15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [Row(
-          children: [
-            Expanded(child: InkWell(
-              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>IncomeScreen(),
-                                ),
-                                
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(166, 60, 63, 248),
+        leading: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Image.asset(
+            'lib/assets/pngegg (22) 1.png',
+            fit: BoxFit.contain,
+          ),
+        ),
+        title: const Text(
+          'PaisaMate',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              
+
+              const SizedBox(height: 20),
+
+              const Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Money Management',
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              Card(
+                elevation: 5,
+                color: const Color.fromARGB(255, 220, 214, 255),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 200,
+                  child: Stack(
+                    
+                    children: [ Positioned(left: 40,top:30, child:ValueListenableBuilder<double>(
+                          valueListenable: totalIncomeNotifier,
+                          builder: (context, income, child) {
+                            return Text(
+                              'Income : ₹${income.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                  
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 0, 81, 255),
+                                  
+                              ),
+                            );
+                          },
+                        ),
+                    ),
+
+                          Positioned(left: 40,top:90, child:ValueListenableBuilder<double>(
+                          valueListenable: totalExpenseNotifier,
+                          builder: (context, expense, child) {
+                            return Text(
+                              'Expense : ₹${expense.toStringAsFixed(2)}',
+
+                              style: const TextStyle(
+                                  
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 248, 52, 52),
+                                  
+                              ),
+                            );
+                          },
+                        ),),
+                      
+
+                       
+
+                        const SizedBox(height: 20),
+                        Positioned(left: 40,top: 150,child:ValueListenableBuilder<double>(
+                          valueListenable: totalIncomeNotifier,
+                          builder: (context, income, child) {
+                            return ValueListenableBuilder<double>(
+                              valueListenable: totalExpenseNotifier,
+                              builder: (context, expense, child) {
+                                final balance = income - expense;
+
+                                return Text(
+                                  'Balance : ₹${balance.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green,
+                                  ),
                                 );
-                                loadTotalIncome();
+                              },
+                            );
+                        
+                          },
+                        ),
+                  )],
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 50),
 
+Center(
+  child: Column(
+    children: [
+      SizedBox(
+        width: 200,
+        height: 75,
+        child: InkWell(
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => IncomeScreen(),
+              ),
+            );
 
-              },
-              child: Card(
-              child: SizedBox(height: 100,
-              child: Center(
-                child: Text('Income'),
-              ),),
-            ) ,
-            )
-            ,),
-            SizedBox(width: 10,),
-            Expanded(child: InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>ExpenseScreen()));
-                
-
-              },
-              child: Card(
-              child: SizedBox(
-                height: 100,
-                child: Center(
-                  child: Text('Expense'),
+            loadTotalIncome();
+          },
+          child: Card(
+            shape: RoundedRectangleBorder(
+    borderRadius: BorderRadiusGeometry.circular(20) ,
+  ),
+            color: Color.fromARGB(255, 85, 201, 255),
+            child: Center(
+              child: Text(
+                'Income',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-
-            )
-            
-            
-            
-            
-            ),
-          ],
-        ),
-        SizedBox(height:10 ,),
-        InkWell(
-          onTap: (){
-
-          },
-          child:Card(
-  child: SizedBox(
-    width: double.infinity,
-    height: 150,
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ValueListenableBuilder<double>(
-          valueListenable: totalIncomeNotifier,
-          builder: (context, income, child) {
-            return Text(
-              'Income: ₹${income.toStringAsFixed(2)}',
-            );
-          },
-        ),
-        ValueListenableBuilder<double>(
-          valueListenable: totalExpenseNotifier,
-          builder: (context, expense, child) {
-            return Text(
-              'Expense: ₹${expense.toStringAsFixed(2)}',
-            );
-          },
-        ),
-        ValueListenableBuilder<double>(
-  valueListenable: totalIncomeNotifier,
-  builder: (context, income, child) {
-    return ValueListenableBuilder<double>(
-      valueListenable: totalExpenseNotifier,
-      builder: (context, expense, child) {
-        final balance = income - expense;
-
-        return Text(
-          'Balance: ₹ ${balance.toStringAsFixed(2)}',
-          style: const TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
           ),
-        );
-      },
-    );
-  },
-)
-      ],
-    ),
+        ),
+      ),
+
+      const SizedBox(height: 10),
+
+      SizedBox(
+        width: 200,
+        height: 75,
+        child: InkWell(
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ExpenseScreen(),
+              ),
+            );
+
+            loadTotalExpense();
+          },
+          child:  Card(
+            shape: RoundedRectangleBorder(
+    borderRadius: BorderRadiusGeometry.circular(20) ,
   ),
-)
-        ) ,
-        
-        SizedBox(height: 10,),
-        Text('Smart Management',style: TextStyle(fontSize: 30,fontStyle:FontStyle.italic,color: const Color.fromARGB(255, 255, 0, 0) ),),
-        Row(
-          children: [
-            Expanded(child: InkWell(
-              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>ScreenAlerts(),
-                                ),
-                                
-                                );
-                                loadTotalIncome();
+            color: Color.fromARGB(255, 85, 201, 255),
+            child: Center(
+              child: Text(
+                'Expense',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
 
+      const SizedBox(height: 10),
 
-              },
-              child: Card(
-              child: SizedBox(height: 100,
-              child: Center(
-                child: Text('Smart Alerts'),
-              ),),
-            ) ,
-            )
-            ,)
+      SizedBox(
+        width: 200,
+        height: 75,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ScreenAlerts(),
+              ),
+            );
+          },
+          child:  Card(
+            shape: RoundedRectangleBorder(
+    borderRadius: BorderRadiusGeometry.circular(20) ,
+  ),
+            color: Color.fromARGB(255, 85, 201, 255),
             
-          ],
-
-        )
-
-        
-        
-        ],
-        
+            child: Center(
+              child: Text(
+                'Smart Alerts',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
-      
-      
+    ],
+  ),
+),
+              
+  
+              
+            ],
+          ),
+        ),
       ),
-      
-      ),
-
-
-      
-      
-      
-      
-      
-      
-      );
-      
-    
+    );
   }
 }

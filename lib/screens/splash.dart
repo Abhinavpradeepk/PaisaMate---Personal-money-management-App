@@ -21,16 +21,59 @@ class _ScreenSplashState extends State<ScreenSplash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: AnimatedContainer(duration: Duration(seconds: 3),
-        color: Colors.amber,
-        width: 200.0,
-        
-          child: Text('PaisaMate',
-
-          ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF2C88FF),
+        Color(0xFFFFFFFF),
+              
+            ]
+          )
         ),
+      
+      
         
+      
+      
+      
+      
+        
+        child: Center(
+        child: Column(
+      mainAxisSize: MainAxisSize.min,
+      
+      children: [
+        Image.asset(
+          'lib/assets/pngegg (22) 1.png',
+          height: 150,
+        ),
+        const SizedBox(height: 16),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Paisa',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+            ),
+            const Text('Mate',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 255, 255, 255),
+              ),
+            )
+          ],
+        ),
+      ],
+        ),
+      )
       ),
     );
   }
