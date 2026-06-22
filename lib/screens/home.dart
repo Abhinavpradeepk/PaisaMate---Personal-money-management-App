@@ -55,6 +55,21 @@ class _ScreenHomeState extends State<ScreenHome> {
             fit: BoxFit.contain,
           ),
         ),
+        actions: <Widget> [IconButton(onPressed: (){
+          showAboutDialog(context: context,applicationName: 'PaisaMate',applicationVersion: '1.0.0',applicationIcon:Image.asset('lib/assets/pngegg (22) 1.png',width: 48,height: 48,),
+          children: [
+    const Padding(
+      padding: EdgeInsets.only(top: 20),
+      child: Text('Developed by Abhinav Pradeep'),
+      
+    ),
+  ],
+        
+
+          ); 
+
+        }, icon:Icon(Icons.info_outlined))],
+
         title: const Text(
           'PaisaMate',
           style: TextStyle(
