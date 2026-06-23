@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:paisamate/screens/home.dart';
 import 'package:paisamate/screens/splash.dart';
 void main() {
   runApp(const Main());
@@ -11,6 +12,7 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'PaisaMate',
+      debugShowCheckedModeBanner: false,
       home: const ScreenSplash(),
 
 

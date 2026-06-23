@@ -150,95 +150,154 @@ class _ScreenAlertsState extends State<ScreenAlerts> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Paisa Mate Smart Alerts'),
-      ),
+  leading: IconButton(
+    icon: const Icon(Icons.arrow_back, color: Colors.white),
+    onPressed: () => Navigator.pop(context),
+  ),
+  backgroundColor: const Color.fromARGB(166, 60, 63, 248),
+  title: const Text(
+    'PaisaMate',
+    style: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              'Add New Reminder',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              value: selectedValue,
-              decoration: const InputDecoration(
-                labelText: 'Payment Type',
-                border: OutlineInputBorder(),
-              ),
-              hint: const Text('Select Payment Type'),
-              isExpanded: true,
-              items: paymentTypes.map((value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (newValue) {
-                setState(() {
-                  selectedValue = newValue;
-                });
-              },
-            ),
-            const SizedBox(height: 16),
-            if (selectedValue == 'Other')
-              TextField(
-                controller: customController,
-                decoration: const InputDecoration(
-                  labelText: 'Custom Payment Type',
-                  border: OutlineInputBorder(),
+            Center(
+              child: const Text(
+                'Add Alerts',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            if (selectedValue == 'Other') const SizedBox(height: 16),
-            TextField(
-              controller: amountController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Amount',
-                prefixIcon: Icon(Icons.currency_rupee),
-                border: OutlineInputBorder(),
-              ),
             ),
             const SizedBox(height: 16),
-            TextField(
-              controller: dateController,
-              readOnly: true,
-              decoration: const InputDecoration(
-                labelText: 'Due Date',
-                prefixIcon: Icon(Icons.calendar_today),
-                border: OutlineInputBorder(),
-              ),
-              onTap: () async {
-                final pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime(2035),
-                );
+            Card(
+  margin: const EdgeInsets.only(top: 20),
+  color: const Color.fromARGB(255, 193, 199, 255),
+  elevation: 8,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(20),
+  ),
+  child: Padding(
+    padding: const EdgeInsets.all(16),
+    child: Column(
+      children: [
+        DropdownButtonFormField<String>(
+          value: selectedValue,
+          decoration: InputDecoration(
+            labelText: 'Payment Type',
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          items: paymentTypes.map((value) {
+            return DropdownMenuItem(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              selectedValue = value;
+            });
+          },
+        ),
 
-                if (pickedDate != null) {
-                  setState(() {
-                    dateController.text =
-                        '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
-                  });
-                }
-              },
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _saveReminder,
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 14),
-                child: Text('Save Reminder'),
+        const SizedBox(height: 15),
+
+        if (selectedValue == 'Other')
+          TextField(
+            controller: customController,
+            decoration: InputDecoration(
+              labelText: 'Custom Payment Type',
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
+          ),
+
+        if (selectedValue == 'Other')
+          const SizedBox(height: 15),
+
+        TextField(
+          controller: amountController,
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            labelText: 'Amount',
+            prefixIcon: const Icon(Icons.currency_rupee),
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 15),
+
+        TextField(
+          controller: dateController,
+          readOnly: true,
+          decoration: InputDecoration(
+            labelText: 'Due Date',
+            prefixIcon: const Icon(Icons.calendar_today),
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          onTap: () async {
+            final pickedDate = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime.now(),
+              lastDate: DateTime(2035),
+            );
+
+            if (pickedDate != null) {
+              setState(() {
+                dateController.text =
+                    '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
+              });
+            }
+          },
+        ),
+
+        const SizedBox(height: 20),
+
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            minimumSize: const Size(140, 50),
+          ),
+          onPressed: _saveReminder,
+          child: const Text('Save Reminder',style: TextStyle(color: Colors.white)),
+        ),
+      ],
+    ),
+  ),
+),
+            const SizedBox(height: 24),
             
             const SizedBox(height: 32),
-            const Text(
-              'Your Reminders',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Center(
+              child: const Text(
+                'Scheduled Alerts',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.red),
+              ),
             ),
             const SizedBox(height: 16),
             FutureBuilder<List<AlertModel>>(
@@ -317,3 +376,4 @@ class _ScreenAlertsState extends State<ScreenAlerts> {
     );
   }
 }
+ 
